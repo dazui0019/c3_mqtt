@@ -14,14 +14,15 @@ const char UserName[]     = "hicode_soil&a15JvS2y9ut";
 const char mqttClientID[] = "a15JvS2y9ut.hicode_soil|securemode=2,signmethod=hmacsha256,timestamp=1652252328359|";
 const char mqttPassword[] = "18c74ab51c0802745098bbe50952dd7144cfb590d8166d0ee8289e475f4c5c24";
 //Topic
-const char Topic[] = "/sys/a15JvS2y9ut/hicode_soil/thing/event/property/post";//需要往这个topic发送
+const char Topic[] = "/sys/a15JvS2y9ut/hicode_soil/thing/event/property/post";//需要往这个topic发送(阿里云)
+const char emqxTopic[] = "/esp32/post"; //本地broker
 
 //本地服务器
 const char localBrokerAddress[] = "192.168.2.148";
 const char localClientID[]    = "esp32";
 
 void mqtt::setLocalBroker(){
-  BrokerFlag = 1;
+  BrokerFlag = 0;
 }
 
 //连接MQTT服务器
@@ -65,7 +66,10 @@ void mqtt::MqttPub(String Serialmsg)
   String outputJOSN = InputJSONhandler(Serialmsg);
   char Pubmsg[outputJOSN.length() + 1];//因为字符串数组需要多一个位置存放'/0',所以需要将长度+1
   strcpy(Pubmsg, outputJOSN.c_str());  //把字符对象中的字符串转成字符，并放入字符串数组中(publish无法使用String类型)
-  mqttClient.publish(Topic, Pubmsg);
+  if(!BrokerFlag)
+    mqttClient.publish(Topic, Pubmsg);
+  else if(BrokerFlag)
+    mqttClient.publish(emqxTopic, Pubmsg);
 }
 
 //在oled上显示连接信息

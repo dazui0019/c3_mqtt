@@ -157,13 +157,13 @@ void waitForInput()
         // ticker.detach();
         mqttClient.setLocalBroker();  //设置为本地服务器
         u8g2.clear();
-        u8g2.drawStr(0, 40, "set local broker");
+        u8g2.drawStr(0, 40, "set aliyun");
         u8g2.sendBuffer();
         return;
       }
     }
   }
   u8g2.clear();
-  u8g2.drawStr(0, 40, "set aliyun");
+  u8g2.drawStr(0, 40, "set local broker");
   u8g2.sendBuffer();
 }

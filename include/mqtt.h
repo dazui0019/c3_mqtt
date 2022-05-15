@@ -21,7 +21,7 @@ class mqtt{
     private:
         PubSubClient mqttClient;
         //服务器选择标志: 0(aliyun), 1(local server)
-        uint8_t BrokerFlag = 0;
+        uint8_t BrokerFlag = 1;
 };
 
 #endif
