@@ -19,6 +19,9 @@ uint8_t NoData  = 1;  //0:接收到数据、1:没有接收到数据
 uint8_t rst_counter = 0;
 uint8_t rstFlag = 0;
 
+float temperature = 0.0;
+uint8_t moisture = 0;
+
 WiFiClient wificlient;
 mqtt mqttClient(wificlient);
 //esp32 SCL(22) SDA(21)
@@ -26,6 +29,8 @@ U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SD
 frame stm(Serial1);
 void MonitoSerialPort();
 void waitForInput();
+void layout_display();
+void dataDisplay();
 
 ESP32Timer ITimer0(0);
 ESP32Timer ITimer1(1);
@@ -72,8 +77,6 @@ bool IRAM_ATTR Timer1Handler(void * timerNo)
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(STM32RST_PIN, OUTPUT);
-  digitalWrite(STM32RST_PIN, LOW);
   pinMode(BUTTON, INPUT);
   pinMode(LED0, OUTPUT);
   pinMode(LED1, OUTPUT);
@@ -82,7 +85,7 @@ void setup() {
 
   Serial.begin(115200);   //用来调试，输出到电脑
   Serial1.begin(115200);  //用来和stm32通信
-  Serial1.setPins(1, 0);
+  Serial1.setPins(0, 1);
 
   while (!Serial && !Serial1){}
 
@@ -94,6 +97,7 @@ void setup() {
   mqttClient.MqttConnect();
   delay(1000);
   mqttClient.Display(u8g2); //显示mqtt 连接状态
+  layout_display();
   ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS * 1000, Timer1Handler);
 }
 
@@ -124,6 +128,7 @@ void MonitoSerialPort()
   //解析来自串口的数据
   if (StmMessage.length() > 0){  //如果字符串长度大于零，说明接收到数据了。
     mqttClient.MqttPub(StmMessage); //发布
+    dataDisplay();
     NoData = 0;
   }
   else if(DebugMessage.length() > 0){
@@ -165,5 +170,30 @@ void waitForInput()
   }
   u8g2.clear();
   u8g2.drawStr(0, 40, "set local broker");
+  u8g2.sendBuffer();
+}
+
+void layout_display(){
+  u8g2.clearBuffer();					// clear the internal memory
+  u8g2.setFont(u8g2_font_7x14_tf);	// choose a suitable font
+  u8g2.drawStr(0, mois_y, "moisture: ");
+  u8g2.drawStr(0, temp_y, "temperature: ");
+  u8g2.drawStr(0, cnt_y, "cnt: emqx");
+  u8g2.drawStr(0,sub_y,"sub: /esp32/post");	// write something to the internal memory
+  u8g2.sendBuffer();
+}
+
+void dataDisplay(){
+  /* 如果有0的话下一次显示会不正常，所以清空一下 */
+  u8g2.setCursor(mois_x, mois_y);
+  u8g2.print("  ");
+  u8g2.setCursor(temp_x, temp_y);
+  u8g2.printf("   ");
+  u8g2.sendBuffer();
+  /* 显示数据 */
+  u8g2.setCursor(mois_x, mois_y);
+  u8g2.printf("%2d", moisture);
+  u8g2.setCursor(temp_x, temp_y);
+  u8g2.printf("%3.1f", temperature);
   u8g2.sendBuffer();
 }

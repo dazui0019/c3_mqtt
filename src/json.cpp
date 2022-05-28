@@ -1,6 +1,10 @@
 #include <ArduinoJson.h>
+#include <U8g2lib.h>
 #include "debug.h"
 #include "json.h"
+
+extern uint8_t moisture;
+extern float temperature;
 
 String MQTTmessage;
 
@@ -31,12 +35,14 @@ String InputJSONhandler(String InputStringJSON)
                     //  从stm32发过来的数据里解析出传感器数值
                     //soilValue数组    soilValue[0]:湿度，soilValue[1]:温度
                     //根据具体的数据创建json数据对象
-                    if(STM32json["soilValue"][0] != NULL){//数值不为NULL则创建该JSON对象（说明有这个数据）
+                    if(STM32json["soilValue"][0] != NULL){//数值不为NULL（0）则创建该JSON对象（说明有这个数据）
                         JsonObject CurrentHumidity = params.createNestedObject("CurrentHumidity"); //在params对象中创建一个SoilMoisture对象(大括号)
+                        moisture = STM32json["soilValue"][0];
                         CurrentHumidity["value"] = STM32json["soilValue"][0];   //设置对象的值{}
                     }
                     if(STM32json["soilValue"][1] != NULL){//数值不为NULL则创建该JSON对象
                         JsonObject CurrentTemperature = params.createNestedObject("CurrentTemperature"); //在params对象中创建一个SoilMoisture对象
+                        temperature = STM32json["soilValue"][1];
                         CurrentTemperature["value"] = STM32json["soilValue"][1];   //设置对象的值
                     }
                 }

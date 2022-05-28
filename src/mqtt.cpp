@@ -16,9 +16,10 @@ const char mqttPassword[] = "18c74ab51c0802745098bbe50952dd7144cfb590d8166d0ee82
 //Topic
 const char Topic[] = "/sys/a15JvS2y9ut/hicode_soil/thing/event/property/post";//需要往这个topic发送(阿里云)
 const char emqxTopic[] = "/esp32/post"; //本地broker
+const char subTopic[] = "/esp32/control";
 
 //本地服务器
-const char localBrokerAddress[] = "192.168.2.148";
+const char localBrokerAddress[] = "172.18.48.71";
 const char localClientID[]    = "esp32";
 
 void mqtt::setLocalBroker(){
