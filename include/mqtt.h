@@ -18,7 +18,6 @@ class mqtt{
         void setLocalBroker();
         int state(){return mqttClient.state();};
         uint8_t getBroker(){return BrokerFlag;};
-        void mqtt::getBrokerHost();
     private:
         PubSubClient mqttClient;
         //服务器选择标志: 0(aliyun), 1(local server)

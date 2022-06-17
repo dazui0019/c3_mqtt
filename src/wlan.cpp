@@ -10,6 +10,7 @@ const char PASSWORD []  = "dazui12137";
 //WiFi连接函数
 void WiFiConnect(void){
   WiFi.mode(WIFI_STA);
+  WiFi.setAutoReconnect(true);
   WiFi.begin(WiFiSSID, PASSWORD);
   Serial.print("wifi connecting");
   while (WiFi.status() != WL_CONNECTED){
