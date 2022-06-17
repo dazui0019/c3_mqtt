@@ -50,8 +50,8 @@ String InputJSONhandler(String InputStringJSON)
                 //todo
             }
         }
-
-        serializeJson(MQTTjson, Serial); //输出到电脑串口
+        if(BON_DEBUG_ON)
+            serializeJson(MQTTjson, Serial); //输出到电脑串口
         serializeJson(MQTTjson, outputStringJSON);  //输出到字符串对象
         return outputStringJSON;
     }else{

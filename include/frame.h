@@ -10,7 +10,7 @@ class frame{
     public:
         frame(HardwareSerial& frameSerial): serial(frameSerial){//C++新增的初始化方式 i(1) 相当于 i = 1;
             serial.begin(115200);
-            serial.setPins(0, 1);
+            serial.setPins(1, 0);
             while (!serial){}
         }
         void led_on();

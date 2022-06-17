@@ -72,28 +72,3 @@ void mqtt::MqttPub(String Serialmsg)
   else if(BrokerFlag)
     mqttClient.publish(emqxTopic, Pubmsg);
 }
-
-//在oled上显示连接信息
-void mqtt::Display(U8G2_SSD1306_128X64_NONAME_F_SW_I2C& u8g2){
-  //todo display state
-  u8g2.clear();
-  u8g2.setCursor(0, 30);
-  if(!state()){
-    switch(BrokerFlag){
-      case 0:
-        u8g2.print("connected to aliyun");
-        break;
-      case 1:
-        u8g2.print("connected to emqx");
-        break;
-      default:
-        break;
-    }
-    u8g2.sendBuffer();
-  }else{
-    u8g2.print("Failed! Error Code:");
-    u8g2.setCursor(35, 50);
-    u8g2.printf("%d", state());
-    u8g2.sendBuffer();
-  }
-}

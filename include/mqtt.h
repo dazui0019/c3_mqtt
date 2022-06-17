@@ -17,11 +17,14 @@ class mqtt{
         void MqttPub(String Serialmsg);
         void setLocalBroker();
         int state(){return mqttClient.state();};
-        void Display(U8G2_SSD1306_128X64_NONAME_F_SW_I2C& u8g2);
+        uint8_t getBroker(){return BrokerFlag;};
+        void mqtt::getBrokerHost();
     private:
         PubSubClient mqttClient;
         //服务器选择标志: 0(aliyun), 1(local server)
         uint8_t BrokerFlag = 1;
+        //连接状态
+        uint8_t ConnectState = 0;
 };
 
 #endif

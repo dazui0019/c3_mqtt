@@ -2,5 +2,6 @@
 #define BON_WLAN_H
 
 void WiFiConnect();
+void WiFiManagerConnect();
 
 #endif

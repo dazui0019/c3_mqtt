@@ -13,7 +13,7 @@
 #define DEBUG_SER Serial
 
 //debug 开关
-#define BON_DEBUG_ON    1
+#define BON_DEBUG_ON    false
 
 //c语言 预编译器 (#)运算符、(##)粘合剂、(...)变参宏
 #define BON_INFO(fmt,arg...)        DEBUG_SER.printf("<<-INFO->> "#fmt"\r\n",##arg)
